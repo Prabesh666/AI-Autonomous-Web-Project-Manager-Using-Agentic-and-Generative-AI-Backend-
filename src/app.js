@@ -36,6 +36,9 @@
 
 // export default app;
 import express from "express";
+import session from "express-session";
+import passport from "./config/passport.js";
+
 import authRoutes from "./routes/auth.routes.js";
 import projectRoutes from "./routes/project.routes.js";
 
@@ -43,6 +46,20 @@ const app = express();
 
 app.use(express.json());
 
+/* Session (required for OAuth) */
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false
+    })
+);
+
+/* Passport */
+app.use(passport.initialize());
+app.use(passport.session());
+
+/* Routes */
 app.use("/api/auth", authRoutes);
 app.use("/api", projectRoutes);
 

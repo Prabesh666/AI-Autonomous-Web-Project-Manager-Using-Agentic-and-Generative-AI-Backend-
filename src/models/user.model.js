@@ -16,8 +16,11 @@ const userSchema = new mongoose.Schema(
         },
 
         password: {
-            type: String,
-            required: true
+            type: String
+        },
+
+        githubId: {
+            type: String
         },
 
         role: {
@@ -26,13 +29,8 @@ const userSchema = new mongoose.Schema(
             default: "user"
         },
 
-        resetPasswordToken: {
-            type: String
-        },
-
-        resetPasswordExpire: {
-            type: Date
-        }
+        resetPasswordToken: String,
+        resetPasswordExpire: Date
 
     },
     {
