@@ -36,11 +36,14 @@
 
 // export default app;
 import express from "express";
+import authRoutes from "./routes/auth.routes.js";
+import projectRoutes from "./routes/project.routes.js";
 
 const app = express();
 
-app.get("/", (req, res) => {
-    res.send("Server is running");
-});
+app.use(express.json());
+
+app.use("/api/auth", authRoutes);
+app.use("/api", projectRoutes);
 
 export default app;
