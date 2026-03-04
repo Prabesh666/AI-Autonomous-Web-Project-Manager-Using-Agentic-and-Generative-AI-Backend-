@@ -3,16 +3,12 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema(
     {
         name: {
-            type: String,
-            required: true,
-            trim: true
+            type: String
         },
 
         email: {
             type: String,
-            required: true,
-            unique: true,
-            lowercase: true
+            unique: true
         },
 
         password: {
@@ -23,20 +19,21 @@ const userSchema = new mongoose.Schema(
             type: String
         },
 
+        googleId: {
+            type: String
+        },
+
         role: {
             type: String,
-            enum: ["user", "admin"],
             default: "user"
         },
 
         resetPasswordToken: String,
         resetPasswordExpire: Date
-
     },
     {
         timestamps: true
-    });
+    }
+);
 
-const User = mongoose.model("User", userSchema);
-
-export default User;
+export default mongoose.model("User", userSchema);
