@@ -3,12 +3,12 @@ export const plannerAgent = async (project) => {
     return {
         agent: "planner",
         plan: [
-            "Analyze requirements",
+            "Analyze project requirements",
             "Design architecture",
-            "Create roadmap"
+            "Create development roadmap"
         ],
-        project,
-        stage: "planned"
+        stage: "planned",
+        project
     };
 
 };

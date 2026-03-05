@@ -4,11 +4,11 @@ export const taskAgent = async (project) => {
         agent: "task",
         tasks: [
             "Build backend APIs",
-            "Build frontend UI",
+            "Create frontend UI",
             "Setup database"
         ],
-        project,
-        stage: "tasks_created"
+        stage: "tasks_created",
+        project
     };
 
 };

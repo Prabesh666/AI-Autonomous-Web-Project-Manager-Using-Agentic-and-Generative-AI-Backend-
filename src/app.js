@@ -2,7 +2,7 @@ import express from "express";
 import session from "express-session";
 import passport from "./config/passport.js";
 import taskRoutes from "./routes/task.routes.js";
-
+import agentRoutes from "./routes/agent.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import projectRoutes from "./routes/project.routes.js";
 
@@ -24,7 +24,7 @@ app.use(passport.session());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api", projectRoutes);
-
+app.use("/api/agents", agentRoutes);
 app.use("/api", taskRoutes);
 
 export default app;

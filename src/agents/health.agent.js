@@ -2,7 +2,7 @@ export const healthAgent = async () => {
 
     return {
         agent: "health",
-        status: "All services running"
+        status: "All services operational"
     };
 
 };
