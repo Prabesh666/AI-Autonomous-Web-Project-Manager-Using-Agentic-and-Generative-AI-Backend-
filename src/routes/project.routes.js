@@ -15,16 +15,31 @@
 // export default router;
 
 import express from "express";
+import {
+    createProject,
+    getProjects,
+    getProjectById,
+    updateProject,
+    deleteProject
+} from "../controllers/project.controller.js";
+
 import { verifyToken } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-// Test protected route
-router.get("/projects", verifyToken, (req, res) => {
-    res.json({
-        message: "Protected route working",
-        user: req.user
-    });
-});
+// Create project
+router.post("/projects", verifyToken, createProject);
+
+// Get all projects
+router.get("/projects", verifyToken, getProjects);
+
+// Get single project
+router.get("/projects/:id", verifyToken, getProjectById);
+
+// Update project
+router.put("/projects/:id", verifyToken, updateProject);
+
+// Delete project
+router.delete("/projects/:id", verifyToken, deleteProject);
 
 export default router;
