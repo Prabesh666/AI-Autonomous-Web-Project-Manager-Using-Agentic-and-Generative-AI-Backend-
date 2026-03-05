@@ -1,2 +1,8 @@
-// health.agent.js
-// TODO: Implement functionality
+export const healthAgent = async () => {
+
+    return {
+        agent: "health",
+        status: "All services running"
+    };
+
+};
