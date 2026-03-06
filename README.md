@@ -745,6 +745,275 @@ The following features are planned to further enhance the capabilities of the **
 
 ---
 
+# AI Autonomous Project Backend – Decision & Engine Layer
+
+## Overview
+
+The **Decision Service and Engine Layer** form the core intelligence of the AI Autonomous Project Manager.
+They enable the system to automatically decide **which agent should run next**, prioritize tasks, resolve dependencies, and dynamically replan workflows.
+
+This architecture allows the platform to behave like a **multi-agent autonomous system** rather than a simple CRUD API.
+
+---
+
+# 1. Decision Service
+
+**File**
+
+```
+src/services/decision.service.js
+```
+
+## Purpose
+
+The **Decision Service** acts as the orchestration layer between:
+
+* API Controllers
+* AI Agents
+* Decision Engines
+
+It determines which agent should execute next and applies intelligent workflow logic.
+
+## Responsibilities
+
+* Select next agent using rule engine
+* Resolve task dependencies
+* Score and prioritize tasks
+* Trigger replanning if failures occur
+* Execute the appropriate agent
+
+## Flow
+
+```
+Controller
+   ↓
+Decision Service
+   ↓
+Rule Engine
+   ↓
+Dependency Engine
+   ↓
+Scoring Engine
+   ↓
+Replanning Engine
+   ↓
+Agent Execution
+```
+
+## Example Usage
+
+Request
+
+```
+POST /api/agents/run
+```
+
+Body
+
+```json
+{
+  "type": "decision",
+  "payload": {
+    "stage": "planned"
+  }
+}
+```
+
+The decision service determines the next agent automatically.
+
+---
+
+# 2. Engine Layer
+
+The **Engine Layer** provides decision logic used by the Decision Service.
+
+Location:
+
+```
+src/docs/engine
+```
+
+Components:
+
+```
+dependency.engine.js
+rule.engine.js
+replanning.engine.js
+scoring.engine.js
+```
+
+---
+
+# 3. Rule Engine
+
+**File**
+
+```
+rule.engine.js
+```
+
+## Purpose
+
+Determines **which agent should execute next** based on the current workflow stage.
+
+## Example Logic
+
+```
+start → planner
+planned → task
+tasks_created → risk
+risk_checked → ethics
+ethics_checked → report
+```
+
+## Example Output
+
+```
+planner
+```
+
+---
+
+# 4. Dependency Engine
+
+**File**
+
+```
+dependency.engine.js
+```
+
+## Purpose
+
+Resolves dependencies between tasks and ensures they are executed in the correct order.
+
+## Example
+
+Input
+
+```
+build_api → depends on setup_db
+build_ui → depends on build_api
+```
+
+Output order
+
+```
+setup_db → build_api → build_ui
+```
+
+---
+
+# 5. Scoring Engine
+
+**File**
+
+```
+scoring.engine.js
+```
+
+## Purpose
+
+Assigns priority scores to tasks based on factors such as:
+
+* priority
+* risk level
+* complexity
+
+## Example
+
+```
+Task Priority + Risk = Score
+```
+
+Tasks with the **highest score execute first**.
+
+---
+
+# 6. Replanning Engine
+
+**File**
+
+```
+replanning.engine.js
+```
+
+## Purpose
+
+Handles workflow recovery when failures occur.
+
+If a task fails, the engine:
+
+* blocks dependent tasks
+* adjusts execution order
+* triggers alternative workflows
+
+---
+
+# 7. Agent Execution Pipeline
+
+The system follows a **multi-agent workflow**.
+
+```
+Decision Agent
+      ↓
+Planner Agent
+      ↓
+Task Agent
+      ↓
+Risk Agent
+      ↓
+Ethics Agent
+      ↓
+Report Agent
+```
+
+Each agent performs a specialized function within the autonomous project management lifecycle.
+
+---
+
+# 8. Architecture Diagram
+
+```
+API
+ ↓
+Routes
+ ↓
+Controllers
+ ↓
+Decision Service
+ ↓
+Engine Layer
+ ↓
+Agents
+ ↓
+Models / Database
+```
+
+---
+
+# 9. Benefits of the Engine Layer
+
+* Enables **autonomous decision making**
+* Supports **dynamic workflow adaptation**
+* Improves **task prioritization**
+* Ensures **correct execution order**
+* Provides **fault tolerance through replanning**
+
+---
+
+# 10. Future Improvements
+
+Potential enhancements include:
+
+* LLM-based planning using `llm.service.js`
+* AI-driven rule generation
+* reinforcement learning task scoring
+* agent collaboration protocols
+* autonomous workflow orchestration
+
+---
+
+
 ## 👨‍💻 Author
 
 **Prabesh Shah**  
