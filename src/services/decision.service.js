@@ -9,64 +9,72 @@ import { resolveDependencies } from "../docs/engine/dependency.engine.js";
 import { scoreTasks } from "../docs/engine/scoring.engine.js";
 import { replanTasks } from "../docs/engine/replanning.engine.js";
 
-export const runAgentService = async (type, payload = {}) => {
+export const runAgentService = async (type, payload) => {
 
-    try {
+  if (type === "rule") {
 
-        let nextAgent = type;
+    const nextAgent = applyRules(payload);
 
-        // Step 1: Decision Engine determines next agent
-        if (type === "decision") {
-            nextAgent = applyRules(payload);
-        }
+    return {
+      engine: "rule",
+      nextAgent
+    };
 
-        // Step 2: Dependency resolution (task ordering)
-        if (Array.isArray(payload.tasks)) {
-            payload.tasks = resolveDependencies(payload.tasks);
-        }
+  }
 
-        // Step 3: Task scoring / prioritization
-        if (Array.isArray(payload.tasks)) {
-            payload.tasks = scoreTasks(payload.tasks);
-        }
+  if (type === "scoring") {
 
-        // Step 4: Replanning if a task failed
-        if (payload.failedTaskId && Array.isArray(payload.tasks)) {
-            payload.tasks = replanTasks(payload.tasks, payload.failedTaskId);
-        }
+    const result = scoreTasks(payload.tasks);
 
-        // Step 5: Execute selected agent
-        switch (nextAgent) {
+    return {
+      engine: "scoring",
+      result
+    };
 
-            case "planner":
-                return await plannerAgent(payload);
+  }
 
-            case "task":
-                return await taskAgent(payload);
+  if (type === "replanning") {
 
-            case "risk":
-                return await riskAgent(payload);
+    const result = replanTasks(payload.tasks, payload.failedTaskId);
 
-            case "ethics":
-                return await ethicsAgent(payload);
+    return {
+      engine: "replanning",
+      result
+    };
 
-            case "report":
-                return await reportAgent(payload);
+  }
 
-            case "health":
-                return await healthAgent(payload);
+  if (type === "dependency") {
 
-            default:
-                throw new Error(`Unknown agent type: ${nextAgent}`);
+    const result = resolveDependencies(payload.tasks);
 
-        }
+    return {
+      engine: "dependency",
+      result
+    };
 
-    } catch (error) {
+  }
 
-        console.error("Agent execution error:", error);
+  switch (type) {
 
-        throw new Error(`Agent execution failed: ${error.message}`);
+    case "planner":
+      return await plannerAgent(payload);
 
-    }
+    case "task":
+      return await taskAgent(payload);
+
+    case "risk":
+      return await riskAgent(payload);
+
+    case "ethics":
+      return await ethicsAgent(payload);
+
+    case "report":
+      return await reportAgent(payload);
+
+    default:
+      throw new Error("Unknown agent or engine type");
+
+  }
 
 };
