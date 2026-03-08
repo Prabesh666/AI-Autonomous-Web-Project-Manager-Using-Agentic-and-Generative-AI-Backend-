@@ -14,7 +14,7 @@ import app from "./app.js";
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => {
-        console.log("📡  MongoDB connected successfully!  🛢️");
+        console.log("📡  MongoDB connected 🟡 successfully! 🛢️");
     })
     .catch((error) => {
         console.error("⚠️ MongoDB connection failed:", error);
@@ -25,5 +25,5 @@ const PORT = process.env.PORT || 5001;
 
 /* Start server */
 app.listen(PORT, () => {
-    console.log(`🖥️  Server started on port  🔌  ${PORT}`);
+    console.log(`🖥️  Server started 🟡 on port  🔌  ${PORT}`);
 });
